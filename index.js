@@ -20,6 +20,8 @@ async function run(){
         //console.log('connected');
         const database = client.db('travelco');
         const servicesCollection = database.collection('services');
+        const usersCollection = database.collection('users');
+
 
            
         //Get API
@@ -27,6 +29,13 @@ async function run(){
             const cursor = servicesCollection.find({});
             const services = await cursor.toArray();
             res.send(services);
+        })
+
+        //Get API for users
+        app.get('/users', async(req, res) =>{
+            const cursor = usersCollection.find({});
+            const users = await cursor.toArray();
+            res.send(users);
         })
 
         //Get single service
@@ -45,6 +54,18 @@ async function run(){
             //console.log(result);
             res.json(result)
         }) 
+
+        //POST API for users
+        app.post('/users', async(req, res) =>{
+            const user = req.body;
+           console.log('hit the post', user)
+            const result = await usersCollection.insertOne(user);
+            //console.log(result);
+            res.json(result)
+        })
+
+
+
         //Delete API
         app.delete('/services/:id', async(req, res) =>{
             const id = req.params.id;
@@ -52,6 +73,17 @@ async function run(){
             const result = await servicesCollection.deleteOne(query);
             res.json(result);
         })
+
+//Delete API for users
+app.delete('/users/:id', async(req, res) =>{
+    const id = req.params.id;
+    const query = {_id:ObjectId(id)};
+    const result = await usersCollection.deleteOne(query);
+    res.json(result);
+})
+
+
+
    }
    finally{
        //await client.close();
