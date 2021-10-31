@@ -46,6 +46,18 @@ async function run(){
             const service = await servicesCollection.findOne(query);
             res.json(service)
         })
+     //Get single user
+
+    app.get('/users/:id', async(req,res)=>{
+    const id =req.params.id;
+    const query ={_id: ObjectId(id)};
+    const user = await usersCollection.findOne(query);
+    res.json(user)
+     })
+
+
+
+
         //POST API
         app.post('/services', async(req, res) =>{
             const service = req.body;
